@@ -22,6 +22,7 @@ frmCheckParser::frmCheckParser() {
     message.print(EINFO, "countRecords: " + QString::number(getCountReaders()).toStdString());
     
     emit slot_Begin();
+    parser pars;
 }
 
 size_t frmCheckParser::shiftYear() 
@@ -206,13 +207,16 @@ void frmCheckParser::doRecord()
         fldIt = field.begin();
         if (fldIt->first != "error")
         {
-            if (fldIt->first == "#51:")
-                currentReaderData.regs[pars.getFilial(fldIt->second)].push_back(fldIt->second);
-            else
-            if (fldIt->first == "#52:")
-                currentReaderData.reregs[pars.getFilial(fldIt->second)].push_back(fldIt->second);                
-            else
-                currentReaderData.visits[pars.getFilial(fldIt->second)].push_back(fldIt->second);
+            if (!pars.closedFilial(fldIt->second))
+            {
+                if (fldIt->first == "#51:")
+                    currentReaderData.regs[pars.getFilial(fldIt->second)].push_back(fldIt->second);
+                else
+                if (fldIt->first == "#52:")
+                    currentReaderData.reregs[pars.getFilial(fldIt->second)].push_back(fldIt->second);                
+                else
+                    currentReaderData.visits[pars.getFilial(fldIt->second)].push_back(fldIt->second);
+            }
         }   
         else
         {

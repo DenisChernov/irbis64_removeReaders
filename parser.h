@@ -21,6 +21,7 @@ public:
     virtual ~parser();
     
     vector<pair<string, string>> div_to_replace;
+    string closed_filials[2] = {"Ф 15", "Ф 14"};
     
     bool needColor(string line);
     map <string, string> get_reg_rereg_visit(string line);
@@ -28,6 +29,7 @@ public:
     string getYear(string line);
     string changeDiv(string line);
     bool checkIn(string line);
+    bool closedFilial(string line);
     
 private:
 

@@ -118,3 +118,16 @@ bool parser::checkIn(string line)
     
     return false;
 }
+
+bool parser::closedFilial(string line) 
+{
+    for (size_t i = 0; i < sizeof(closed_filials) / sizeof(*closed_filials); i++)
+    {
+        boost::regex re(".*(" + closed_filials[i] + ").*");
+        boost::smatch result;
+        boost::regex_match(line, result, re);
+        if (result[1] != "")
+            return true;
+    }
+    return false;
+}
