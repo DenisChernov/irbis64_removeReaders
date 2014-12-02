@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>colors.h</itemPath>
+      <itemPath>fOper.h</itemPath>
+      <itemPath>frmCheckParser.h</itemPath>
+      <itemPath>msgs.h</itemPath>
+      <itemPath>parser.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+      <itemPath>frmCheckParser.ui</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>fOper.cpp</itemPath>
+      <itemPath>frmCheckParser.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+      <itemPath>msgs.cpp</itemPath>
+      <itemPath>parser.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="4">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <modules>core gui widgets</modules>
+      </qt>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>boost_system</linkerLibLibItem>
+            <linkerLibLibItem>boost_regex</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="colors.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fOper.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fOper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="frmCheckParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="frmCheckParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="frmCheckParser.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="4">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <qt>
+        <buildMode>1</buildMode>
+        <modules>core gui widgets</modules>
+      </qt>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="colors.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fOper.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fOper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="frmCheckParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="frmCheckParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="frmCheckParser.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
