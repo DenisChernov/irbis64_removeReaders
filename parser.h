@@ -27,6 +27,7 @@ public:
     string getFilial(string line);
     string getYear(string line);
     string changeDiv(string line);
+    bool checkIn(string line);
     
 private:
 

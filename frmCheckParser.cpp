@@ -191,6 +191,7 @@ void frmCheckParser::doRecord()
 {
     currentReaderData.clear();
     frmParser.lwParsed->clear();
+    filialsToDel.clear();
     parser pars;
     vector<string> currentRecord = readRecord();
     map<string, string> field;
@@ -214,14 +215,12 @@ void frmCheckParser::doRecord()
                 currentReaderData.visits[pars.getFilial(fldIt->second)].push_back(fldIt->second);
         }   
         else
-            frmParser.lwParsed->addItem(QString::fromStdString(it->data()));
+        {
+            if (pars.checkIn(it->data()))
+                frmParser.lwParsed->addItem(QString::fromStdString(it->data()));
+        }
         it++;
     }
-    
-/*    cout << "regs: " << currentReaderData.regs.size()  
-         << "reregs: " << currentReaderData.reregs.size()
-         << "visits: " << currentReaderData.visits.size() << endl;*/
-    
 
 /* ПереРегистрация */
     itFilial = currentReaderData.reregs.begin();
@@ -234,10 +233,16 @@ void frmCheckParser::doRecord()
             //cout << shiftYear() << pars.getYear(itSecond->data()) << endl;
             if (shiftYear() < boost::lexical_cast<size_t>(pars.getYear(itSecond->data())))
                 filialToDelete = false;
+//            else
+//                cout << itSecond->data() << endl;
             itSecond++;
         }
         if (filialToDelete)
+        {
+            cout << "maybe?: " << itFilial->first << endl;
             filialsToDel.push_back(itFilial->first);
+            
+        }
         itFilial++;
     }
     
@@ -260,9 +265,7 @@ void frmCheckParser::doRecord()
             {
                 cout << "delete filial: " << itFilial->first << endl;
             }
-
         }
-        
         itFilial++;
     }
     

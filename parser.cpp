@@ -107,3 +107,14 @@ string parser::changeDiv(string line)
     }
     return line;
 }
+
+bool parser::checkIn(string line) 
+{
+    boost::regex re("(#51:|#52:|#40:|#10:|#11:|#12:|#21:|#50:|#67:|#16:|#19:|#20:|#1006:|#691:|#33:|#31:|#1005:|#1007:|#920:|#907:|#30:|#3001:).*");
+    boost::smatch result;
+    boost::regex_match(line, result, re);
+    if (result[1] != "")
+        return true;
+    
+    return false;
+}
