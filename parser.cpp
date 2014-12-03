@@ -10,7 +10,7 @@
 parser::parser() 
 {
     div_to_replace.push_back(make_pair("Ф 1 ИЗ", "Ф 1 ИО"));
-//    div_to_replace.push_back(make_pair("Ф 2 ИЗ", "Ф 1 ИО"));
+    div_to_replace.push_back(make_pair("Ф 25 ИК", "Ф 25 ИО"));
 //    div_to_replace.push_back(make_pair("Ф 1 ИЗ", "Ф 1 ИО"));
 //    div_to_replace.push_back(make_pair("Ф 1 ИЗ", "Ф 1 ИО"));
 }
@@ -94,7 +94,10 @@ string parser::getYear(string line)
     boost::regex re(".*\\^[Dd](\\d{4}).*");
     boost::smatch result;
     boost::regex_match(line, result, re);
-    return string(result[1]);
+    if (result[1] != "")
+        return string(result[1]);
+    else
+        return "0";
 }
 
 string parser::changeDiv(string line) 

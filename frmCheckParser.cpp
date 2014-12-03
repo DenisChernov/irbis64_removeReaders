@@ -21,8 +21,8 @@ frmCheckParser::frmCheckParser() {
     message.print(EINFO, "shift year: " + boost::lexical_cast<string>(shiftYear()));
     message.print(EINFO, "countRecords: " + QString::number(getCountReaders()).toStdString());
     
-    emit slot_Begin();
-    parser pars;
+//    emit slot_Begin();
+    autoRemakeRDR();
 }
 
 size_t frmCheckParser::shiftYear() 
@@ -51,6 +51,7 @@ frmCheckParser::~frmCheckParser() {
 }
 
 size_t frmCheckParser::getCountReaders() {
+    countRecords = 0;
     f.fROpen("rdr.txt");
     string line = "";
     while (!f.atEnd())
@@ -192,13 +193,14 @@ void frmCheckParser::doRecord()
 {
     currentReaderData.clear();
     frmParser.lwParsed->clear();
+    newRecord.clear();
     filialsToDel.clear();
     parser pars;
     vector<string> currentRecord = readRecord();
     map<string, string> field;
     map<string, string>::iterator fldIt;
     map<string, vector <string>>::const_iterator itFilial;
-    printRecord(currentRecord);
+    //printRecord(currentRecord);
     
     vector<string>::const_iterator it = currentRecord.begin();
     while (it != currentRecord.end())
@@ -221,7 +223,10 @@ void frmCheckParser::doRecord()
         else
         {
             if (pars.checkIn(it->data()))
-                frmParser.lwParsed->addItem(QString::fromStdString(it->data()));
+            {
+//                frmParser.lwParsed->addItem(QString::fromStdString(it->data()));
+                newRecord.push_back(it->data());
+            }
         }
         it++;
     }
@@ -243,7 +248,7 @@ void frmCheckParser::doRecord()
         }
         if (filialToDelete)
         {
-            cout << "maybe?: " << itFilial->first << endl;
+//            cout << "maybe?: " << itFilial->first << endl;
             filialsToDel.push_back(itFilial->first);
             
         }
@@ -258,17 +263,37 @@ void frmCheckParser::doRecord()
         vector<string>::const_iterator itSecond =  itFilial->second.begin();
         while (itSecond != itFilial->second.end())
         {
-//            cout << itSecond->data() << endl;
             if (shiftYear() < boost::lexical_cast<size_t>(pars.getYear(itSecond->data())))
+            {
                 filialToDelete = false;
+            }
+
             itSecond++;
         }
         if (filialToDelete)
         {
             if (checkIn(itFilial->first))
             {
-                cout << "delete filial: " << itFilial->first << endl;
+//                cout << "delete filial: " << itFilial->first << endl;
             }
+            else
+            {
+                bool foundRereg = false;
+                map<string, vector<string>>::const_iterator itReregs = currentReaderData.reregs.begin();
+                while (itReregs != currentReaderData.reregs.end())
+                {
+                    if (itReregs->first == itFilial->first)
+                    {
+                        foundRereg = true;
+                        break;
+                    }
+                    itReregs++;
+                }
+                
+                if (!foundRereg)
+                    filialsToDel.push_back(itFilial->first);
+            }
+            
         }
         itFilial++;
     }
@@ -302,7 +327,17 @@ void frmCheckParser::doRecord()
         itFilial++;
     }
     
-    printParsedRecord();
+//    cout << "Регов: " << currentReaderData.regs.size() << endl;
+//    cout << "Филиалов на удаление: " << filialsToDel.size() << endl;
+    
+//    printParsedRecord();
+    
+    if (filialsToDel.size() != currentReaderData.regs.size())
+    {
+//        f.fWOpen("rdr_remaked.txt");
+        writeRecord();
+//        f.fClose();
+    }
 }
 
 bool frmCheckParser::checkIn(string filial) 
@@ -392,4 +427,105 @@ void frmCheckParser::printParsedRecord()
         }
         it++;
     }    
+}
+
+void frmCheckParser::writeRecord() 
+{
+    vector<string>::const_iterator itNewRecord = newRecord.begin();
+    while (itNewRecord != newRecord.end())
+    {
+        f.writeLine(string(itNewRecord->data()));
+        itNewRecord++;
+    }
+    
+    map<string, vector<string>>::const_iterator it;
+    
+    it = currentReaderData.regs.begin();
+    while (it != currentReaderData.regs.end())
+    {
+        vector<string>::const_iterator itFilial = it->second.begin();
+        while (itFilial != it->second.end())
+        {
+            bool toDel = false;
+            vector<string>::const_iterator flsDelete = filialsToDel.begin();
+            while (flsDelete != filialsToDel.end())
+            {
+                if (it->first == flsDelete->data())
+                {
+                    toDel = true;
+                    break;
+                }
+                flsDelete++;
+            }
+            if (!toDel)
+                f.writeLine("#51: " + string(itFilial->data()));
+            itFilial++;
+        }
+        it++;
+    }
+    
+    it = currentReaderData.reregs.begin();
+    while (it != currentReaderData.reregs.end())
+    {
+        vector<string>::const_iterator itFilial = it->second.begin();
+        while (itFilial != it->second.end())
+        {
+            bool toDel = false;
+            vector<string>::const_iterator flsDelete = filialsToDel.begin();
+            while (flsDelete != filialsToDel.end())
+            {
+                if (it->first == flsDelete->data())
+                {
+                    toDel = true;
+                    break;
+                }
+                flsDelete++;
+            }
+            if (!toDel)            
+                f.writeLine("#52: " + string(itFilial->data()));
+            itFilial++;
+        }
+        it++;
+    }    
+
+    it = currentReaderData.visits.begin();
+    while (it != currentReaderData.visits.end())
+    {
+        vector<string>::const_iterator itFilial = it->second.begin();
+        while (itFilial != it->second.end())
+        {
+            bool toDel = false;
+            vector<string>::const_iterator flsDelete = filialsToDel.begin();
+            while (flsDelete != filialsToDel.end())
+            {
+                if (it->first == flsDelete->data())
+                {
+                    toDel = true;
+                    break;
+                }
+                flsDelete++;
+            }
+            if (!toDel)            
+                f.writeLine("#40: " + string(itFilial->data()));
+            itFilial++;
+        }
+        it++;
+    }        
+    
+    f.writeLine(string("*****"));
+}
+
+void frmCheckParser::autoRemakeRDR() 
+{
+    curRecord = 1;
+    f.fWOpen("rdr_remaked.txt");
+    while (curRecord < countRecords)
+    {
+//        cout << curRecord << endl;
+        doRecord();
+        curRecord++;
+        if (curRecord % 1000 == 0)
+            message.print(EINFO, boost::lexical_cast<string>(curRecord));
+    }
+    f.fClose();
 }

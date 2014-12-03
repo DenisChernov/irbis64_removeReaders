@@ -52,7 +52,7 @@ public:
      *  Записывает строку.
      *  Возвращает количество записанных символов
      */
-    size_t writeLine(string *line);
+    size_t writeLine(string line);
     
     /*
      *  Конец файла?

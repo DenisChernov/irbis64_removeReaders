@@ -57,9 +57,9 @@ size_t fOper::readline(string* line)
     return (*line).length();
 }
 
-size_t fOper::writeLine(string* line) 
+size_t fOper::writeLine(string line) 
 {
-    wFile << (*line) << endl;
+    wFile << line << endl;
     return 0;
 }
 

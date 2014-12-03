@@ -49,9 +49,11 @@ private:
     
     reg_rereg_visits currentReaderData;
     vector<string> filialsToDel;
+    vector<string> newRecord;
     
     size_t getCountReaders();
     vector<string> readRecord();
+    
     void printRecord(vector<string> record);
     void doRecord();
     string curYear();
@@ -59,6 +61,8 @@ private:
     bool checkIn(string filial);
     void printParsedRecord();
     void eraseDeletedFilials();
+    void writeRecord();
+    void autoRemakeRDR();
     
 private slots:    
     void slot_ParseRecord();
