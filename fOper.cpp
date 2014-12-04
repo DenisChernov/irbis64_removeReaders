@@ -5,6 +5,9 @@
  * Created on November 19, 2013, 10:34 PM
  */
 
+#include <ios>
+#include <QtCore/qstring.h>
+#include <iomanip>
 #include "fOper.h"
 
 fOper::fOper() {

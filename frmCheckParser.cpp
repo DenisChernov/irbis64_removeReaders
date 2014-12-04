@@ -22,6 +22,7 @@ frmCheckParser::frmCheckParser() {
     message.print(EINFO, "countRecords: " + QString::number(getCountReaders()).toStdString());
     
 //    emit slot_Begin();
+
     autoRemakeRDR();
 }
 
@@ -73,9 +74,8 @@ vector<string> frmCheckParser::readRecord()
 {
     vector<string> record;
     
-    f.fROpen("rdr.txt");
     string line;
-    size_t rec = 1;
+    int rec = 1;
     
     if (frmParser.leRecordNumber->text().length())
     {
@@ -89,30 +89,14 @@ vector<string> frmCheckParser::readRecord()
         
         frmParser.leRecordNumber->clear();
     }
-    else
-    {
-        if (curRecord != 1)
-        {
-            while (rec != curRecord)
-            {
-                f.readline(&line);
-                if (line.find("*****") == 0)
-                    rec++;
-            }
-            f.readline(&line);
-        }
-    }
-    curRecord = rec;
+
+    f.readline(&line);    
     while (line.find("*****") != 0)
     {
-        line[line.length()-1] = '\0';
+        //line[line.length()-1] = '\0';
         record.push_back(line);
         f.readline(&line);
     }
-    
-//    if (line.find("*****") == 0)
-//        record.pop_back();
-    f.fClose();
     
     return record;
 }
@@ -314,7 +298,7 @@ void frmCheckParser::doRecord()
         currentReaderData.visits[itFilial->first] = visits;
         itFilial++;
     }
-    
+/*    
     itFilial = currentReaderData.visits.begin();
     while (itFilial != currentReaderData.visits.end())
     {
@@ -326,12 +310,13 @@ void frmCheckParser::doRecord()
         }
         itFilial++;
     }
-    
+*/    
 //    cout << "Регов: " << currentReaderData.regs.size() << endl;
 //    cout << "Филиалов на удаление: " << filialsToDel.size() << endl;
     
 //    printParsedRecord();
     
+
     if (filialsToDel.size() != currentReaderData.regs.size())
     {
 //        f.fWOpen("rdr_remaked.txt");
@@ -374,7 +359,7 @@ void frmCheckParser::printParsedRecord()
                 flsDelete++;
             }
             if (!toDel)
-                frmParser.lwParsed->addItem("#51: " + QString::fromStdString(itFilial->data()));
+                frmParser.lwParsed->addItem("#51:" + QString::fromStdString(itFilial->data()));
             itFilial++;
         }
         it++;
@@ -398,7 +383,7 @@ void frmCheckParser::printParsedRecord()
                 flsDelete++;
             }
             if (!toDel)            
-                frmParser.lwParsed->addItem("#52: " + QString::fromStdString(itFilial->data()));
+                frmParser.lwParsed->addItem("#52:" + QString::fromStdString(itFilial->data()));
             itFilial++;
         }
         it++;
@@ -422,7 +407,7 @@ void frmCheckParser::printParsedRecord()
                 flsDelete++;
             }
             if (!toDel)            
-                frmParser.lwParsed->addItem("#40: " + QString::fromStdString(itFilial->data()));
+                frmParser.lwParsed->addItem("#40:" + QString::fromStdString(itFilial->data()));
             itFilial++;
         }
         it++;
@@ -458,7 +443,7 @@ void frmCheckParser::writeRecord()
                 flsDelete++;
             }
             if (!toDel)
-                f.writeLine("#51: " + string(itFilial->data()));
+                f.writeLine("#51:" + string(itFilial->data()));
             itFilial++;
         }
         it++;
@@ -482,7 +467,7 @@ void frmCheckParser::writeRecord()
                 flsDelete++;
             }
             if (!toDel)            
-                f.writeLine("#52: " + string(itFilial->data()));
+                f.writeLine("#52:" + string(itFilial->data()));
             itFilial++;
         }
         it++;
@@ -506,26 +491,26 @@ void frmCheckParser::writeRecord()
                 flsDelete++;
             }
             if (!toDel)            
-                f.writeLine("#40: " + string(itFilial->data()));
+                f.writeLine("#40:" + string(itFilial->data()));
             itFilial++;
         }
         it++;
     }        
-    
-    f.writeLine(string("*****"));
+    f.writeLine("*****\r");
 }
 
 void frmCheckParser::autoRemakeRDR() 
 {
     curRecord = 1;
+    f.fROpen("rdr.txt");
     f.fWOpen("rdr_remaked.txt");
     while (curRecord < countRecords)
     {
-//        cout << curRecord << endl;
         doRecord();
         curRecord++;
         if (curRecord % 1000 == 0)
             message.print(EINFO, boost::lexical_cast<string>(curRecord));
     }
+
     f.fClose();
 }

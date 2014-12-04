@@ -59,6 +59,8 @@ public:
      */
     bool atEnd();
     
+    bool isOpen(){return wFile.is_open();};
+    
 private:
     int _frID;
     int _fwID;
